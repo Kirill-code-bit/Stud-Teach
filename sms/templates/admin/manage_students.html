@@ -7,7 +7,7 @@
 {% block body %}
 
 <div class="container-fluid w-100" style="margin: 100px 0px;">
-    <h1>Manage Students</h1>
+    <h1>управление студентами</h1>
     <hr>
 
 
@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <th>студент id</th>
-                <th>полнео имя</th>
+                <th>полное имя</th>
                 <th>имя отца</th>
                 <th>имя матери</th>
                 <th>дата рождения</th>
@@ -68,7 +68,7 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Update Student's Details</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">обновить данные студента</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -81,11 +81,11 @@
                                 <input type="text" name="m_name" value="{{student.mother_name}}" class="form-control" placeholder="Mother's Name">
                                 <br>
                                 <div class="input-group mb-3">
-                                    <label class="input-group-text" for="inputGroupSelect01">Gender</label>
+                                    <label class="input-group-text" for="inputGroupSelect01">пол</label>
                                     <select class="form-select" name="gender" id="inputGroupSelect01">
-                                      <option selected>{{student.gender}}</option>
-                                      <option value="Male">Male</option>
-                                      <option value="Female">Female</option> 
+                                      <option selected>выбрать</option>
+                                      <option value="Male">мужской</option>
+                                      <option value="Female">женский</option> 
                                     </select>
                                 </div>
                                 <br>
@@ -97,11 +97,11 @@
                                 <br>
                                 <input type="tel" name="contact_number" value="{{student.contact_num}}" class="form-control" placeholder="Contact Number">
                                 <br>
-                                <small>Current DoB: {{student.date_of_birth}}</small>
+                                <small>текущая дата: {{student.date_of_birth}}</small>
                                 <input type="date" name="dob" value="{{student.date_of_birth}}" class="form-control" id="">
                                 <br>
                                 <div class="input-group mb-3">
-                                    <label class="input-group-text" for="inputGroupSelect01">Select Course</label>
+                                    <label class="input-group-text" for="inputGroupSelect01">выбрать курс</label>
                                     <select class="form-select" name="course" id="inputGroupSelect01">
                                       <option selected>{{student.course}}</option>
                                       <option value="BSC">BSC</option>
@@ -123,7 +123,7 @@
                                 <br><br>
                         
                         
-                                <h4>Login Details</h4>
+                                <h4>детали авторизации</h4>
                                 <hr>
                                 <input type="text" value="{{student.user_name}}" name="stu_user_name" class="form-control" placeholder="Username">
                                 <br>
@@ -131,8 +131,8 @@
                                 <br>
                                 
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <input type="submit" class="btn btn-primary" value="Update">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">закрыть</button>
+                                    <input type="submit" class="btn btn-primary" value="обновить">
                                 </div>
                             </form>
                         </div>

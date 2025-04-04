@@ -6,38 +6,38 @@
 
 {% block body %}
 <div class="container" style="margin: 80px;">
-    <h2>Add Student</h2>
+    <h2>добавить студента</h2>
     <form action="{% url 'add_student' %}" method="post">
         {% csrf_token %}
-        <input type="text" name="full_name" class="form-control" placeholder="Full Name">
+        <input type="text" name="full_name" class="form-control" placeholder="полное имя">
         <br>
-        <input type="text" name="f_name" class="form-control" placeholder="Father's Name">
+        <input type="text" name="f_name" class="form-control" placeholder="имя отца">
         <br>
-        <input type="text" name="m_name" class="form-control" placeholder="Mother's Name">
+        <input type="text" name="m_name" class="form-control" placeholder="имя матери">
         <br>
         <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">Gender</label>
+            <label class="input-group-text" for="inputGroupSelect01">Пол</label>
             <select class="form-select" name="gender" id="inputGroupSelect01">
-              <option selected>Choose...</option>
-              <option value="Male">Male</option> 
-              <option value="Female">Female</option>
+              <option selected>Выбрать...</option>
+              <option value="Male">мужской</option> 
+              <option value="Female">женский</option>
             </select>
         </div>
         <br>
-        <input type="text" name="address" class="form-control" placeholder="Permanant Address">
+        <input type="text" name="address" class="form-control" placeholder="Постоянный адрес">
         <br>
-        <input type="text" name="city" class="form-control" placeholder="City">
+        <input type="text" name="city" class="form-control" placeholder="город">
         <br>
-        <input type="email" name="stu_email" placeholder="Email" class="form-control">
+        <input type="email" name="stu_email" placeholder="электронный адрес" class="form-control">
         <br>
-        <input type="tel" name="contact_number" class="form-control" placeholder="Contact Number">
+        <input type="tel" name="contact_number" class="form-control" placeholder="контактный номер">
         <br>
         <input type="date" name="dob" class="form-control" id="">
         <br>
         <div class="input-group mb-3">
-            <label class="input-group-text" for="inputGroupSelect01">Select Course</label>
+            <label class="input-group-text" for="inputGroupSelect01">выбрать курс</label>
             <select class="form-select" name="course" id="inputGroupSelect01">
-              <option selected>Choose...</option>
+              <option selected>выбрать...</option>
               <option value="BSC">BSC</option>
               <option value="BA">BA</option>
               <option value="BCOM">BCOM</option>
@@ -53,18 +53,18 @@
             </select>
         </div>
         <br>
-        <input type="text" name="stu_id" class="form-control" placeholder="Student Id">
+        <input type="text" name="stu_id" class="form-control" placeholder="студенсеский билет">
         <br><br>
 
 
-        <h4>Login Details</h4>
+        <h4>детали авторизации</h4>
         <hr>
-        <input type="text" name="stu_user_name" class="form-control" placeholder="Username">
+        <input type="text" name="stu_user_name" class="form-control" placeholder="имя пользователя">
         <br>
-        <input type="password" name="stu_pwd" class="form-control" placeholder="Password">
+        <input type="password" name="stu_pwd" class="form-control" placeholder="пароль">
         <br>
 
-        <input type="submit" class="btn btn-primary form-control" value="Add Student">
+        <input type="submit" class="btn btn-primary form-control" value="добавить студента">
     </form>
 </div>
 {% endblock %}
