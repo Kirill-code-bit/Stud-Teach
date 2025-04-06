@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import (AboutPage, Item, Grade, Schedule, Attendance,
                      ContactPage, Student, Course, Notice, Teacher)
@@ -183,35 +183,41 @@ def adminLogout(request):
 
 
 def adminAbout(request):
-    about_details = AboutPage.objects.all()
-    data = {"aboutDetails": about_details}
+    about_obj = AboutPage.objects.first()
+    if not about_obj:
+        about_obj = AboutPage.objects.create(about="Текст по умолчанию")
+    data = {"about": about_obj}
     return render(request, 'admin/admin_about.html', data)
 
 
 def updateAbout(request, id):
     if request.method == 'POST':
-        aboutText = request.POST['text']
-        about_obj = AboutPage.objects.get(id=id)
-        about_obj.about = aboutText
+        about_obj = get_object_or_404(AboutPage, id=id)
+        about_text = request.POST.get('text', '')
+        about_obj.about = about_text
         about_obj.save()
     return redirect('admin_about')
 
 
 def adminContact(request):
-    contact_details = ContactPage.objects.all()
-    data = {"contactDetails": contact_details}
-    return render(request, 'admin/admin_contact.html', data)
+    contact_obj = ContactPage.objects.first()
+    if not contact_obj:
+        contact_obj = ContactPage.objects.create(
+            address="Ваш адрес",
+            email="your@email.com",
+            contact_num=1234567890
+        )
+
+    return render(request, 'admin/admin_contact.html',
+                  {'contactDetails': [contact_obj]})
 
 
 def updateContact(request, id):
     if request.method == 'POST':
-        contactAddress = request.POST['address']
-        contactEmail = request.POST['email']
-        contactNumber = request.POST['contact']
-        contact_obj = ContactPage.objects.get(id=id)
-        contact_obj.address = contactAddress
-        contact_obj.email = contactEmail
-        contact_obj.contact_num = contactNumber
+        contact_obj = get_object_or_404(ContactPage, id=id)
+        contact_obj.address = request.POST.get('address', '')
+        contact_obj.email = request.POST.get('email', '')
+        contact_obj.contact_num = request.POST.get('contact', '')
         contact_obj.save()
     return redirect('admin_contact')
 
