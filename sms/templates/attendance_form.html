@@ -1,22 +1,40 @@
 {% extends 'base.html' %}
 {% load static %}
-
+{% block body %}
+<style>
+    body{
+        background-color:mediumaquamarine;
+    }
+    form{
+        display: block;
+        margin-left: 500px;
+        
+        width: 400px;
+    }
+    button[type="submit"]{
+        background:forestgreen;
+    }
+</style>
 <body>
-    <h1>Attendance Form</h1>
+    <h1>форма посещаемости</h1>
     <form method="post">
         {% csrf_token %}
-        <label for="student_name">Student Name:</label>
+        <label for="student_name">имя студента:</label>
         <input type="text" id="student_name" name="student_name" required><br><br>
+        <label for="student_name">курс:</label>
+        <input type="text" id="student_course" name="student_course" required><br><br>
+        
 
-        {% block body %}
-
-        <label for="date">Date:</label>
+        <label for="date">дата:</label>
         <input type="date" id="date" name="date" required><br><br>
         
-        <label for="is_present">Present:</label>
-        <input type="checkbox" id="is_present" name="is_present"><br><br>
+        <label for="is_present">присутствие:</label>
+        <input type="checkbox" id="present" name="present"><br><br>
         
-        <button type="submit">Submit</button>
+        <label for="is_present">отсутствие:</label>
+        <input type="checkbox" id="absent" name="absent"><br><br>
+
+        <button type="submit">подтверждение</button>
     </form>
 </body>
 {% endblock %}

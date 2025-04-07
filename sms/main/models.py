@@ -135,8 +135,7 @@ class Attendance(models.Model):
     is_present = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.course.name} - {self.date} - {'Present' if self.
-                                                     is_present else 'Absent'}"
+        return f"{self.course.name} - {self.student} - {self.date} - {self.course} - {'Present' if self.is_present else 'Absent'}"
 
 
 class Notice(models.Model):
