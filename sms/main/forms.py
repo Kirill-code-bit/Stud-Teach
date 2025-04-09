@@ -10,7 +10,7 @@ class SearchForm(forms.Form):
 class AttendanceForm(forms.ModelForm):
     class Meta:
         model = Attendance
-        fields = ['student', 'date', 'is_present']
+        fields = ['student', 'course', 'date', 'is_present']
 
 
 class GradeForm(forms.ModelForm):

@@ -94,13 +94,13 @@ def add_schedule(request):
 
 def attendance_form(request):
     if request.method == 'POST':
-        student_name = request.POST.get('student_name')
+        student = request.POST.get('student')
         course = request.POST.get('course')
         date = request.POST.get('date')
         is_present = request.POST.get('is_present') == 'on'
 
         Attendance.objects.create(
-            student_name=student_name,
+            student=student,
             course=course,
             date=date,
             is_present=is_present
