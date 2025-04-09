@@ -8,29 +8,36 @@
         }
         input[type="text"]{
             background-color:snow;
-            margin-left: 120px;
+            margin-left: 240px;
         }
         label{
-            margin-left: 120px;
+            margin-left: 240px;
         }
-        li{
-            margin-left: 120px;
-            list-style-type: none;
+        h1{
+            align-items: center;
+            text-align: center;
         }
         .form[method="post"]{
-            font-size: xx-large;
-            margin-left: 400px;
+            display: block;
+            margin-left: 500px;
+            
+            width: 400px;
         }
-        .button[type="text"]{
-            background-color:chartreuse;
+        button[type="submit"]{
+        background-color:chartreuse;
+        display: block;
+        margin-left: 500px;
+        padding: 4px;
+        width: 140px;
+        border: 2px solid forestgreen;
         }
 
     </style>
-    <h1>Add Schedule</h1>
+    <h1>добавить расписание</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Save</button>
+        <button type="submit">сохранить</button>
     </form>
 </body>
 {% endblock %}

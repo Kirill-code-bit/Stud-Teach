@@ -3,24 +3,29 @@
 {% block body %}
 <body>
     <style>
-        body{
-            background-color:rgb(140, 212, 221);
-        }
-        form{
-            display: block;
-            margin-left: 500px;
-            
-            width: 400px;
-        }
-        button[type="submit"]{
-            background:forestgreen;
-        }
+    body{
+        background-color:rgb(140, 212, 221);
+    }
+    h1{
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+    }
+    form{
+        display: block;
+        margin-left: 500px;
+        
+        width: 400px;
+    }
+    button[type="submit"]{
+        background:forestgreen;
+    }
     </style>
-    <h1>Add Grade</h1>
+    <h1>добавление оценки</h1>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Add Grade</button>
+        <button type="submit">добавить</button>
     </form>
 </body>
 {% endblock %}
