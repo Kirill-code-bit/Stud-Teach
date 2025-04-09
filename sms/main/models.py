@@ -132,10 +132,10 @@ class Attendance(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     date = models.DateField()
-    is_present = models.BooleanField(default=False)
+    is_present = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.course.name} - {self.student} - {self.date} - {self.course} - {'Present' if self.is_present else 'Absent'}"
+        return f"{self.course.name} - {self.student} - {self.date} - {self.course}- {'Present' if self.is_present else 'Absent'}"
 
 
 class Notice(models.Model):
