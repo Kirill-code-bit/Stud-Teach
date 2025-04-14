@@ -1,158 +1,110 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.contrib.auth.models import User
 
 
-class Item(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
+class Course(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Название курса")
+    description = models.TextField(blank=True, verbose_name="Описание")
+    start_date = models.DateField(verbose_name="Начало курса")
+    end_date = models.DateField(verbose_name="Окончание курса")
+    teacher = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Преподаватель",
+        related_name='taught_courses'
+    )
+
+    class Meta:
+        ordering = ['start_date']
+        verbose_name = 'Курс'
+        verbose_name_plural = 'Курсы'
 
     def __str__(self):
         return self.name
 
 
+class StudentProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,
+                                related_name='student_profile')
+    phone = models.CharField(max_length=20, blank=True, verbose_name="Телефон")
+
+    class Meta:
+        verbose_name = 'Профиль студента'
+        verbose_name_plural = 'Профили студентов'
+
+    def __str__(self):
+        return f"Студент: {self.user.username}"
+
+
+class TeacherProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE,
+                                related_name='teacher_profile')
+    phone = models.CharField(max_length=20, blank=True, verbose_name="Телефон")
+
+    class Meta:
+        verbose_name = 'Профиль преподавателя'
+        verbose_name_plural = 'Профили преподавателей'
+
+    def __str__(self):
+        return f"Преподаватель: {self.user.username}"
+
+
 class Schedule(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField()
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-
-    def __str__(self):
-        return self.title
-
-
-class AboutPage(models.Model):
-    about = models.TextField()
-
-    def __str__(self):
-        return self.about
-
-
-class Post(models.Model):
-    title = models.CharField(max_length=200)
-    content = models.TextField()
-
-    def __str__(self):
-        return self.title
-
-
-class ContactPage(models.Model):
-    address = models.TextField()
-    contact_num = models.IntegerField()
-    email = models.EmailField()
-
-    def __str__(self):
-        return self.address
-
-
-class Student(models.Model):
-    full_name = models.CharField(max_length=100)
-    father_name = models.CharField(max_length=100)
-    mother_name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=50, default="Male")
-    address = models.CharField(max_length=100)
-    city = models.CharField(max_length=50)
-    email = models.EmailField()
-    contact_num = models.IntegerField(default=1234567)
-    date_of_birth = models.DateField()
-    course = models.CharField(max_length=50)
-    stu_id = models.CharField(max_length=50)
-    user_name = models.CharField(max_length=50)
-    password = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.full_name
-
-
-class Course(models.Model):
-    COURSE_TYPES = [
-        ('lecture', 'Лекция'),
-        ('seminar', 'Семинар'),
-        ('lab', 'Лабораторная работа'),
-    ]
-
-    name = models.CharField(max_length=100)
-    code = models.CharField(max_length=20, unique=True)
-    description = models.TextField(blank=True)
-    credits = models.PositiveSmallIntegerField(default=3)
-    course_type = models.CharField(
-        max_length=10,
-        choices=COURSE_TYPES,
-        default='lecture'
+    DAYS_OF_WEEK = (
+        ('mon', 'Понедельник'),
+        ('tue', 'Вторник'),
+        ('wed', 'Среда'),
+        ('thu', 'Четверг'),
+        ('fri', 'Пятница'),
+        ('sat', 'Суббота'),
+        ('sun', 'Воскресенье'),
     )
 
+    course = models.ForeignKey(Course, on_delete=models.CASCADE,
+                               related_name='schedules')
+    day = models.CharField(max_length=3, choices=DAYS_OF_WEEK,
+                           verbose_name="День недели")
+    start_time = models.TimeField(verbose_name="Время начала")
+    end_time = models.TimeField(verbose_name="Время окончания")
+
+    class Meta:
+        ordering = ['day', 'start_time']
+        verbose_name = 'Расписание'
+        verbose_name_plural = 'Расписания'
+
     def __str__(self):
-        return f"{self.code}: {self.name}"
+        return f"{self.course.name} - {self.get_day_display()}"
 
 
 class Grade(models.Model):
-    GRADE_CHOICES = [
-        ('A', 'Отлично (90-100)'),
-        ('B', 'Хорошо (80-89)'),
-        ('C', 'Удовлетворительно (70-79)'),
-        ('D', 'Неудовлетворительно (60-69)'),
-        ('F', 'Не сдано (0-59)'),
-    ]
+    GRADE_CHOICES = (
+        (5, 'Отлично (A)'),
+        (4, 'Хорошо (B)'),
+        (3, 'Удовлетворительно (C)'),
+        (2, 'Неудовлетворительно (D)'),
+        (1, 'Провал (F)'),
+    )
 
-    student = models.ForeignKey('Student', on_delete=models.CASCADE)
-    course = models.ForeignKey('Course', on_delete=models.CASCADE)
-    date = models.DateField()
-    numeric_score = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        validators=[MinValueValidator(0), MaxValueValidator(100)]
+    student = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='grades',
+        verbose_name="Студент"
     )
-    letter_grade = models.CharField(
-        max_length=1,
-        choices=GRADE_CHOICES,
-        blank=True
+    course = models.ForeignKey(
+        Course,
+        on_delete=models.CASCADE,
+        related_name='grades',
+        verbose_name="Курс"
     )
+    value = models.IntegerField(choices=GRADE_CHOICES, verbose_name="Оценка")
+    date = models.DateField(auto_now_add=True, verbose_name="Дата оценки")
+    comment = models.TextField(blank=True, verbose_name="Комментарий")
 
     class Meta:
-        ordering = ['-date']
+        verbose_name = 'Оценка'
+        verbose_name_plural = 'Оценки'
+        unique_together = [['student', 'course']]
 
     def __str__(self):
-        return f"{self.student} - {self.course}: {self.letter_grade}"
-
-    def save(self, *args, **kwargs):
-        if not self.letter_grade:
-            if self.numeric_score >= 90:
-                self.letter_grade = 'A'
-            elif self.numeric_score >= 80:
-                self.letter_grade = 'B'
-            elif self.numeric_score >= 70:
-                self.letter_grade = 'C'
-            elif self.numeric_score >= 60:
-                self.letter_grade = 'D'
-            else:
-                self.letter_grade = 'F'
-        super().save(*args, **kwargs)
-
-
-class Attendance(models.Model):
-    student = models.ForeignKey(Student, on_delete=models.CASCADE)
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    date = models.DateField()
-    is_present = models.BooleanField(default=True)
-
-    def __str__(self):
-        return f"{self.course.name} - {self.student} - {self.date} - {self.course} - {'Present' if self.is_present else 'Absent'}"
-
-
-class Notice(models.Model):
-    title = models.CharField(max_length=200)
-    content = models.TextField()
-    isPublic = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.title
-
-
-class Teacher(models.Model):
-    full_name = models.CharField(max_length=100)
-    gender = models.CharField(max_length=50)
-    email = models.EmailField()
-    contact_num = models.CharField(max_length=20)
-    qualification = models.TextField()
-
-    def __str__(self):
-        return self.full_name
+        return f"{self.student.username} - {self.course.name}: {self.get_value_display()}"

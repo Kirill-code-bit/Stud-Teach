@@ -1,62 +1,74 @@
-{% extends 'student/student_base.html' %}
+{% extends 'base.html' %}
 
-{% block title %}
-    Student - Dashboard
-{% endblock %}
+{% block content %}
 
-{% block body %}
-    <div class="container" style="margin: 100px;">
-        <h1>Dashboard</h1>
-        <a href="{% url 'view_notices' %}" class="btn btn-warning" style="float: right; margin-top: -70px;">View Notices</a>
-        <table class="table">
-    
-            <tr>
-                <th>Student Name</th>
-                <td>{{student.full_name}}</td>
+{% extends 'base.html' %}
 
-                <th>Father's Name</th>
-                <td>{{student.father_name}}</td>
-            </tr>
+{% block title %}Личный кабинет студента{% endblock %}
 
-            <tr>
-                <th>Gender</th>
-                <td>{{student.gender}}</td>
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-user-graduate me-2"></i>Мой профиль
+            </div>
+            <div class="card-body">
+                <h5>{{ user.get_full_name }}</h5>
+                <p class="mb-1"><i class="fas fa-envelope me-2"></i>{{ user.email }}</p>
+                {% if user.student_profile.phone %}
+                    <p><i class="fas fa-phone me-2"></i>{{ user.student_profile.phone }}</p>
+                {% endif %}
+                <p><i class="fas fa-id-card me-2"></i>Группа: {{ user.student_profile.group|default:"-" }}</p>
+            </div>
+        </div>
 
-                <th>Mother's Name</th>
-                <td>{{student.mother_name}}</td>
-            </tr>
-
-            <tr>
-                <th>Contact Number</th>
-                <td>{{student.contact_num}}</td>
-
-                <th>Email</th>
-                <td>{{student.email}}</td>
-            </tr>
-
-            <tr>
-                <th>Address</th>
-                <td>{{student.address}}</td>
-
-                <th>City</th>
-                <td>{{student.city}}</td>
-            </tr>
-
-            <tr>
-                <th>Student Id</th>
-                <td>{{student.stu_id}}</td>
-
-                <th>Date of Birth</th>
-                <td>{{student.date_of_birth}}</td>
-            </tr>
-
-            <tr>
-                <th>Course</th>
-                <td>{{student.course}}</td>
-
-                <th>User Name</th>
-                <td>{{student.user_name}}</td>
-            </tr>
-        </table>
+        <div class="list-group">
+            <a href="{% url 'student_dashboard' %}" class="list-group-item list-group-item-action active">
+                <i class="fas fa-home me-2"></i>Главная
+            </a>
+            <a href="{% url 'student_schedule' %}" class="list-group-item list-group-item-action">
+                <i class="fas fa-calendar-alt me-2"></i>Расписание
+            </a>
+            <a href="{% url 'student_grades' %}" class="list-group-item list-group-item-action">
+                <i class="fas fa-star me-2"></i>Успеваемость
+            </a>
+        </div>
     </div>
+
+    <div class="col-md-9">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <i class="fas fa-book-open me-2"></i>Мои курсы
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for course in courses %}
+                    <div class="col-md-6 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ course.name }}</h5>
+                                <p class="card-text">{{ course.description|truncatechars:100 }}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        {{ course.start_date|date:"d.m.Y" }} - {{ course.end_date|date:"d.m.Y" }}
+                                    </small>
+                                    <a href="{% url 'student_grades' %}?course_id={{ course.id }}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        Оценки
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="col-12">
+                        <div class="alert alert-info mb-0">Вы не записаны ни на один курс</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
